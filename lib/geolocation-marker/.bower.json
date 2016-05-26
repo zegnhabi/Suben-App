@@ -1,0 +1,32 @@
+{
+  "name": "geolocation-marker",
+  "description": "Adds a marker and accuracy circle to a Google Map which tracks the user's location",
+  "homepage": "https://chadkillingsworth.github.io/geolocation-marker/",
+  "authors": [
+    {
+      "name": "Chad Killingsworth",
+      "email": "chadkillingsworth@gmail.com"
+    }
+  ],
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "version": "2.0.3",
+  "main": "geolocation-marker.js",
+  "license": "Apache 2.0",
+  "private": true,
+  "_cacheHeaders": {
+    "ETag": "\"53442f67d19b79e3d7ea7299e8890bf6\"",
+    "Last-Modified": "Thu, 05 Nov 2015 13:47:29 GMT",
+    "Content-Length": "4178",
+    "Content-Type": "application/octet-stream",
+    "Content-Disposition": "attachment; filename=geolocation-marker.tgz"
+  },
+  "_release": "e-tag:53442f67d",
+  "_source": "https://github.com/ChadKillingsworth/geolocation-marker/releases/download/v2.0.4/geolocation-marker.tgz",
+  "_target": "*",
+  "_originalSource": "https://github.com/ChadKillingsworth/geolocation-marker/releases/download/v2.0.4/geolocation-marker.tgz",
+  "_direct": true
+}

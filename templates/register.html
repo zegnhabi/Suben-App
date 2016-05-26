@@ -1,0 +1,24 @@
+<ion-view view-title="Suben">
+    <div class="bar bar-header bar-positive">
+        <h1 class="title">Registro de cuenta</h1>
+    </div>
+    <ion-content class="padding">
+      <br /><br /><br />
+        <div class="list">
+          <label class="item item-input">
+            <span class="input-label">E-Mail</span>
+            <input type="email" ng-model="data.email">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Teléfono</span>
+            <input type="tel" ng-model="data.mobile">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Contraseña</span>
+            <input type="password" ng-model="data.password">
+          </label>
+        </div>
+        <a class="button button-block button-outline button-balanced" ng-click="registerUser()">Registrar</a>
+        <a class="button button-block button-outline button-energized" href="#/main">Cancelar</a>
+    </ion-content>
+</ion-view>
