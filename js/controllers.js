@@ -54,14 +54,15 @@ angular.module('starter.controllers', [])
 
 .service('RegisterService', function($http, $q) {
     return {
-        registerUser: function(email, password, mobile, chofer) {
+        registerUser: function(name, last, email, mobile, password) {
             var deferred = $q.defer();
             var promise = deferred.promise;
-            // Simple GET request example:
+            if(name == '' || last == '' || email == '' || mobile == '' || password == '')
+                deferred.reject('No dejes en blanco algún campo. Favor de verificar!');
             $http({
               method: 'POST',
               url: 'http://vergui.xyz:8080/users',
-              data: {email: email, password: password, mobile: mobile, chofer: false}
+              data: {name: name, last: last, email: email, mobile: mobile, password: password, driver: false, photo: ''}
             }).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
@@ -107,10 +108,11 @@ angular.module('starter.controllers', [])
 
 .controller('RegisterCtrl', function($scope, RegisterService, $ionicPopup, $state){
     $scope.data = {};
- 
+    
     $scope.registerUser = function() {
-        RegisterService.registerUser(btoa($scope.data.email), btoa($scope.data.password), btoa($scope.data.mobile),
-         btoa(false)).success(function(data) {
+        RegisterService.registerUser(btoa(''), btoa(''), btoa($scope.data.email), btoa($scope.data.mobile),
+                                    btoa($scope.data.password), btoa(false))
+        .success(function(data) {
              var alertPopup = $ionicPopup.alert({
                 title: 'Register User!',
                 template: data
