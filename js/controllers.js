@@ -57,8 +57,6 @@ angular.module('starter.controllers', [])
         registerUser: function(name, last, email, mobile, password) {
             var deferred = $q.defer();
             var promise = deferred.promise;
-            if(name == '' || last == '' || email == '' || mobile == '' || password == '')
-                deferred.reject('No dejes en blanco algún campo. Favor de verificar!');
             $http({
               method: 'POST',
               url: 'http://vergui.xyz:8080/users',
@@ -110,8 +108,18 @@ angular.module('starter.controllers', [])
     $scope.data = {};
     
     $scope.registerUser = function() {
-        RegisterService.registerUser(btoa(''), btoa(''), btoa($scope.data.email), btoa($scope.data.mobile),
-                                    btoa($scope.data.password), btoa(false))
+        if($scope.data.email == '' || $scope.data.email == undefined 
+            || $scope.data.mobile == '' || $scope.data.mobile == undefined 
+            || $scope.data.password == '' || $scope.data.password == undefined){
+            //deferred.reject('No dejes en blanco algún campo. Favor de verificar!');
+            var alertPopup = $ionicPopup.alert({
+                title: 'Register User!',
+                template: 'No dejes en blanco algún campo. Favor de verificar!'
+            });
+            return;
+        }
+        RegisterService.registerUser(btoa($scope.data.name), btoa($scope.data.last), btoa($scope.data.email),
+         btoa($scope.data.mobile), btoa($scope.data.password), false)
         .success(function(data) {
              var alertPopup = $ionicPopup.alert({
                 title: 'Register User!',
