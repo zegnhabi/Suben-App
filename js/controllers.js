@@ -87,24 +87,26 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state) {
+.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state, $cordovaToast) {
     $scope.data = {};
  
     $scope.login = function() {
         LoginService.loginUser(btoa($scope.data.email), btoa($scope.data.password)).success(function(data) {
             $state.go('app.map');
         }).error(function(data) {
-            var alertPopup = $ionicPopup.alert({
+            /*var alertPopup = $ionicPopup.alert({
                 title: 'Login failed!',
                 template: data
-            });
+            });*/
+            $cordovaToast
+            .show(data, 'short', 'bottom');
         });
     }
 })
 
 .controller('MainCtrl', function($scope) {})
 
-.controller('RegisterCtrl', function($scope, RegisterService, $ionicPopup, $state){
+.controller('RegisterCtrl', function($scope, RegisterService, $ionicPopup, $state, $cordovaToast){
     $scope.data = {};
     
     $scope.registerUser = function() {
@@ -112,25 +114,32 @@ angular.module('starter.controllers', [])
             || $scope.data.mobile == '' || $scope.data.mobile == undefined 
             || $scope.data.password == '' || $scope.data.password == undefined){
             //deferred.reject('No dejes en blanco algún campo. Favor de verificar!');
-            var alertPopup = $ionicPopup.alert({
+            /*var alertPopup = $ionicPopup.alert({
                 title: 'Register User!',
                 template: 'No dejes en blanco algún campo. Favor de verificar!'
-            });
+            });*/
+            $cordovaToast
+            .show('No dejes en blanco algún campo. Favor de verificar!', 'short', 'bottom');
             return;
         }
         RegisterService.registerUser(btoa($scope.data.name), btoa($scope.data.last), btoa($scope.data.email),
          btoa($scope.data.mobile), btoa($scope.data.password), false)
         .success(function(data) {
-             var alertPopup = $ionicPopup.alert({
+             /*var alertPopup = $ionicPopup.alert({
                 title: 'Register User!',
                 template: data
-            });
+            });*/
+            $cordovaToast
+            .show(data, 'short', 'bottom');
+            
             $state.go('login');
         }).error(function(data) {
-            var alertPopup = $ionicPopup.alert({
+            /*var alertPopup = $ionicPopup.alert({
                 title: 'Login failed!',
                 template: data
-            });
+            });*/
+            $cordovaToast
+            .show(data, 'short', 'bottom');
         });
     }    
 })
