@@ -87,100 +87,90 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state, $cordovaToast) {
+.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state) {
     $scope.data = {};
  
     $scope.login = function() {
         LoginService.loginUser(btoa($scope.data.email), btoa($scope.data.password)).success(function(data) {
             $state.go('app.map');
         }).error(function(data) {
-            /*var alertPopup = $ionicPopup.alert({
+            $ionicPopup.alert({
                 title: 'Login failed!',
                 template: data
-            });*/
-            $cordovaToast
-            .show(data, 'short', 'bottom');
+            });
         });
     }
 })
 
 .controller('MainCtrl', function($scope) {})
 
-.controller('RegisterCtrl', function($scope, RegisterService, $ionicPopup, $state, $cordovaToast){
+.controller('RegisterCtrl', function($scope, RegisterService, $ionicPopup, $state){
     $scope.data = {};
     
     $scope.registerUser = function() {
         if($scope.data.email == '' || $scope.data.email == undefined 
             || $scope.data.mobile == '' || $scope.data.mobile == undefined 
             || $scope.data.password == '' || $scope.data.password == undefined){
-            //deferred.reject('No dejes en blanco algún campo. Favor de verificar!');
-            /*var alertPopup = $ionicPopup.alert({
+            $ionicPopup.alert({
                 title: 'Register User!',
                 template: 'No dejes en blanco algún campo. Favor de verificar!'
-            });*/
-            $cordovaToast
-            .show('No dejes en blanco algún campo. Favor de verificar!', 'short', 'bottom');
+            });
             return;
         }
         RegisterService.registerUser(btoa($scope.data.name), btoa($scope.data.last), btoa($scope.data.email),
          btoa($scope.data.mobile), btoa($scope.data.password), false)
         .success(function(data) {
-             /*var alertPopup = $ionicPopup.alert({
+            $ionicPopup.alert({
                 title: 'Register User!',
                 template: data
-            });*/
-            $cordovaToast
-            .show(data, 'short', 'bottom');
-            
+            });
             $state.go('login');
         }).error(function(data) {
-            /*var alertPopup = $ionicPopup.alert({
+            $ionicPopup.alert({
                 title: 'Login failed!',
                 template: data
-            });*/
-            $cordovaToast
-            .show(data, 'short', 'bottom');
+            });
         });
     }    
 })
 
-.controller('MapCtrl', function($scope, $ionicLoading) {
-    $scope.data = {};
-    
-    $scope.centerOnPosition = function(){
-        console.log("centerOnPosition");
-        navigator.geolocation.getCurrentPosition(function(pos) {
-            $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-            var myLocation = new google.maps.Marker({
-                position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
-                map: $scope.map,
-                title: "My Location"
-            });
-        });
-    };
-    
-    ionic.Platform.ready(function() {
-        var myLatlng = new google.maps.LatLng(37.3000, -120.4833);
-        
+.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicLoading) {
+
+    var options = {timeout: 10000, enableHighAccuracy: true};
+    $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+        var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         var mapOptions = {
-            center: myLatlng,
-            zoom: 16,
+            center: latLng,
+            zoom: 15,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             disableDefaultUI: true
         };
-        
-        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-        
-        navigator.geolocation.getCurrentPosition(function(pos) {
-            map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-            var myLocation = new google.maps.Marker({
-                position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
-                map: map,
-                title: "My Location"
+        $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        $scope.latLng = latLng;
+    }, function(error){
+            console.log("Could not get location");
+    }).then(function(){
+        google.maps.event.addListenerOnce($scope.map, 'idle', function(){    
+            var innerLocation = new google.maps.Circle({
+                strokeColor: '#005ce6',
+                strokeOpacity: 1,
+                strokeWeight: 1.5,
+                fillColor: '#005ce6',
+                fillOpacity: 1,
+                map: $scope.map,
+                center: $scope.latLng,
+                radius: 10
+            });
+            var currentLocation = new google.maps.Circle({
+                strokeColor: '#1a75ff',
+                strokeOpacity: 0.5,
+                strokeWeight: 0.5,
+                fillColor: '#1a75ff',
+                fillOpacity: 0.5,
+                map: $scope.map,
+                center: $scope.latLng,
+                radius: 40
             });
         });
-        
-        $scope.map = map;
-        
-    });
+    }); 
 });
